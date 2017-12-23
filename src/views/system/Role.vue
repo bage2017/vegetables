@@ -1,24 +1,24 @@
 <template>
-  <div class="animated fadeIn">
-    <Row>
-      <Col :md="24">
-      <div style="position:relative;">
-        <Table :data="datamodel" :columns="tablecolumns" stripe></Table>
-        <div style="margin: 10px;overflow: hidden">
-          <div style="float: right;">
-            <Page :total="100" :current="1" @on-change="changePage"></Page>
-          </div>
-        </div>
-        <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
+    <div class="animated fadeIn">
+        <Row>
+            <Col :md="24">
+            <div style="position:relative;">
+                <Table :data="datamodel" :columns="tablecolumns" stripe></Table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div style="float: right;">
+                        <Page :total="100" :current="1" @on-change="changePage"></Page>
+                    </div>
+                </div>
+                <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
                             align-items: center;
                             justify-content: center;background: rgba(210, 216, 222, 0.5);" v-if="list_loadding">
-          <Spin size="large"></Spin>
-          <h6 style="color:#2d8cf0;margin-top:10px;">正在获取数据...</h6>
-        </div>
-      </div>
-      </Col>
-    </Row>
-  </div>
+                    <Spin size="large"></Spin>
+                    <h6 style="color:#2d8cf0;margin-top:10px;">正在获取数据...</h6>
+                </div>
+            </div>
+            </Col>
+        </Row>
+    </div>
 </template>
 <script>
 export default {
@@ -33,18 +33,6 @@ export default {
             lodding: false,
             list_loadding: false,
             tablecolumns: [
-                {
-                    type: "expand",
-                    width: "30",
-                    ellipsis: "true",
-                    render: (h, params) => {
-                        return h(expandRow, {
-                            props: {
-                                row: params.row
-                            }
-                        });
-                    }
-                },
                 {
                     title: "角色名称",
                     key: "RoleName",
@@ -239,6 +227,14 @@ export default {
             }, 2000);
             vue.datamodel = this.mockTableData1();
         }
+    },
+    mounted() {
+        const vue = this;
+        vue.list_loadding = true;
+        setTimeout(function() {
+            vue.list_loadding = false;
+        }, 2000);
+        this.setInitPage(1);
     }
 };
 </script>

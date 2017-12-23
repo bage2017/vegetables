@@ -5,7 +5,7 @@ import vue from 'vue';
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:13592/webapi/', // api的base_url
+  baseURL: 'http://120.77.44.27:13592/webapi/', // api的base_url
   timeout: 5000                  // 请求超时时间
 });
 
