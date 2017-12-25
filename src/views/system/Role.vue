@@ -3,10 +3,11 @@
         <Row>
             <Col :md="24">
             <div style="position:relative;">
+                <Button type="info" style="margin-bottom:6px;" @click="addRole">添加</Button>
                 <Table :data="datamodel" :columns="tablecolumns" stripe></Table>
                 <div style="margin: 10px;overflow: hidden">
                     <div style="float: right;">
-                        <Page :total="100" :current="1" @on-change="changePage"></Page>
+                        <Page :total="totalcount" :current="pageindex" :page-size='pagesize' @on-change="changePage"></Page>
                     </div>
                 </div>
                 <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
@@ -22,14 +23,18 @@
 </template>
 <script>
 export default {
+    name: "role",
     data() {
         return {
             progresshow: false,
             progresscount: 0,
             progresstatus: "active",
             progressspeed: 0,
-            datamodel: this.mockTableData1(),
             pageindex: 1,
+            pagesize: 12,
+            isasc: false,
+            totalcount: 0,
+            datamodel: [],
             lodding: false,
             list_loadding: false,
             tablecolumns: [
@@ -46,31 +51,22 @@ export default {
                 {
                     title: "状态",
                     ellipsis: "true",
-                    filters: [
-                        {
-                            label: "删除",
-                            value: 0
-                        },
-                        {
-                            label: "正在处理",
-                            value: 1
-                        },
-                        {
-                            label: "处理完成",
-                            value: 2
-                        }
-                    ],
-                    filterMultiple: false,
-                    filterMethod(value, row) {
-                        if (value === 0) {
-                            return row.task_status === 1;
-                        } else {
-                            return row.task_status === 0;
-                        }
-                    },
                     render: (h, params) => {
-                        const task_status = parseInt(params.row.task_status);
-                        if (task_status === 0)
+                        const status = parseInt(params.row.Status);
+                        if (status === 0)
+                            return h("div", [
+                                h(
+                                    "Tag",
+                                    {
+                                        props: {
+                                            type: "dot",
+                                            color: "red"
+                                        }
+                                    },
+                                    "删除"
+                                )
+                            ]);
+                        else if (status === 1)
                             return h("div", [
                                 h(
                                     "Tag",
@@ -80,10 +76,10 @@ export default {
                                             color: "blue"
                                         }
                                     },
-                                    "正在处理"
+                                    "屏蔽"
                                 )
                             ]);
-                        else if (task_status === 1)
+                        else {
                             return h("div", [
                                 h(
                                     "Tag",
@@ -93,9 +89,10 @@ export default {
                                             color: "green"
                                         }
                                     },
-                                    "处理完成"
+                                    "正常"
                                 )
                             ]);
+                        }
                     }
                 },
                 {
@@ -104,137 +101,80 @@ export default {
                     align: "center",
                     ellipsis: "true",
                     render: (h, params) => {
-                        const task_status = parseInt(params.row.task_status);
-                        if (task_status === 0) {
-                            return h("div", [
-                                h(
-                                    "Tooltip",
-                                    {
-                                        props: {
-                                            content: "还未分析完成，暂时不能查看"
-                                        }
+                        return h("div", [
+                            h(
+                                "Button",
+                                {
+                                    props: {
+                                        type: "info",
+                                        size: "small"
                                     },
-                                    [
-                                        h(
-                                            "Button",
-                                            {
-                                                props: {
-                                                    type: "primary",
-                                                    size: "small",
-                                                    loading: true
-                                                },
-                                                style: {
-                                                    marginRight: "5px"
-                                                }
-                                            },
-                                            "处理中"
-                                        )
-                                    ]
-                                ),
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "error",
-                                            size: "small",
-                                            disabled: true
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.index);
-                                            }
-                                        }
+                                    style: {
+                                        marginRight: "5px"
                                     },
-                                    "删除"
-                                )
-                            ]);
-                        } else if (task_status === 1) {
-                            return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "primary",
-                                            size: "small"
-                                        },
-                                        style: {
-                                            marginRight: "5px"
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.$router.push({
-                                                    path:
-                                                        "/tabledetail/" +
-                                                        ((this.pageindex - 1) *
-                                                            10 +
-                                                            params.index)
-                                                });
-                                            }
+                                    on: {
+                                        click: () => {
+                                            this.$Message.info("编辑");
                                         }
+                                    }
+                                },
+                                "编辑"
+                            ),
+                            h(
+                                "Button",
+                                {
+                                    props: {
+                                        type: "error",
+                                        size: "small"
                                     },
-                                    "查看结果"
-                                ),
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "error",
-                                            size: "small"
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.index);
-                                            }
+                                    on: {
+                                        click: () => {
+                                            this.$Message.info("删除");
                                         }
-                                    },
-                                    "删除"
-                                )
-                            ]);
-                        }
+                                    }
+                                },
+                                "删除"
+                            )
+                        ]);
                     } //render
                 }
             ]
         };
     },
     methods: {
-        mockTableData1() {
-            let data = [];
-            for (let i = 0; i < 10; i++) {
-                data.push({
-                    RoleName: "Business" + Math.floor(Math.random() * 100 + 1),
-                    Remark: Math.floor(Math.random() * 3 + 1),
-                    Status: i % 3 == 0 ? 0 : 1,
-                    task_status: i % 2 == 0 ? 1 : 0,
-                    time: Math.floor(Math.random() * 7 + 1),
-                    update: new Date()
-                });
-            }
-            return data;
-        },
-        formatDate(date) {
-            const y = date.getFullYear();
-            let m = date.getMonth() + 1;
-            m = m < 10 ? "0" + m : m;
-            let d = date.getDate();
-            d = d < 10 ? "0" + d : d;
-            return y + "-" + m + "-" + d;
-        },
-        changePage() {
+        mockTableData() {
             const vue = this;
+            this.$store
+                .dispatch("RolePage", {
+                    pageindex: vue.pageindex,
+                    pagesize: vue.pagesize,
+                    isasc: vue.isasc
+                })
+                .then(result => {
+                    vue.datamodel = result.Data.DataList;
+                    vue.totalcount = result.Data.TotalCount;
+                    if (result.Code != 200) {
+                        this.$Message.error(result.Message);
+                    }
+                })
+                .catch(err => {
+                    this.$Message.error(err);
+                });
+            return vue.datamodel;
+        },
+        changePage(value) {
+            const vue = this;
+            vue.pageindex = value;
             vue.list_loadding = true;
-            setTimeout(function() {
-                vue.list_loadding = false;
-            }, 2000);
-            vue.datamodel = this.mockTableData1();
+            vue.datamodel = this.mockTableData();
+            vue.list_loadding = false;
+        },
+        addRole() {
+            this.$Message.info("添加");
         }
     },
-    mounted() {
-        const vue = this;
-        vue.list_loadding = true;
-        setTimeout(function() {
-            vue.list_loadding = false;
-        }, 2000);
-        this.setInitPage(1);
+    created() {
+        this.mockTableData();
     }
 };
 </script>

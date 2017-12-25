@@ -244,7 +244,6 @@ export default {
           type: "expand",
           width: "30",
           ellipsis: "true",
-
           render: (h, params) => {
             return h(expandRow, {
               props: {
@@ -263,7 +262,6 @@ export default {
           ellipsis: "true",
           key: "timestamp"
         },
-
         {
           title: "时长",
           ellipsis: "true",

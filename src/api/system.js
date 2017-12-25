@@ -1,6 +1,6 @@
 import fetch from 'utils/fetch';
 
-export function rolelist(pageindex, pagesize, isasc) {
+export function rolepage(pageindex, pagesize, isasc) {
   return fetch({
     url: 'Role/PageList',
     method: 'get',
@@ -12,10 +12,10 @@ export function rolelist(pageindex, pagesize, isasc) {
   });
 }
 
-export function roleadd(rolename, remark) {
+export function roleadd(RoleName, Remark) {
   const data = {
-    RoleName: rolename,
-    Remark: remark
+    RoleName,
+    Remark
   };
   return fetch({
     url: 'Role/Add',
@@ -24,13 +24,14 @@ export function roleadd(rolename, remark) {
   });
 }
 
-export function rolemodify(rolename, remark) {
+export function rolemodify(Id, RoleName, Remark) {
   const data = {
-    RoleName: rolename,
-    Remark: remark
+    Id,
+    RoleName,
+    Remark
   };
   return fetch({
-    url: 'Role/Add',
+    url: 'Role/Modify',
     method: 'put',
     data
   });

@@ -68,7 +68,7 @@
             <Dropdown-item >
               <p class="dropdown-itemp"><Icon type="android-settings"></Icon> Settings</p>
               </Dropdown-item>
-                 <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
+                 <Dropdown-item > <a href="" @click="Logout"><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
         </Dropdown-menu>
     </Dropdown> 
       <li class="nav-item d-md-down-none">
@@ -134,7 +134,6 @@ export default {
   }
   .header-item a{
         color:white !important;
-
   }
 
 </style>

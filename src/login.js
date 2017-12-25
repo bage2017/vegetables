@@ -36,7 +36,6 @@ router.beforeEach((to, from, next) => {
         store.dispatch('getNowRoutes', to);
         if (hasPermission(store.getters.roles, to.meta.role)) {
           next()//
-          console.log('has userinfo')
         } else {
           next()
           // next({ path: '/', query: { noGoBack: true } })
