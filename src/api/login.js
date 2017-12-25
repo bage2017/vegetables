@@ -1,9 +1,9 @@
 import fetch from 'utils/fetch';
 
-export function login(username, userpwd) {
+export function login(LoginName, LoginPwd) {
   const data = {
-    LoginName: username,
-    LoginPwd: userpwd
+    LoginName,
+    LoginPwd
   };
   return fetch({
     url: 'Admin/Login',

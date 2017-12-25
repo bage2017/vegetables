@@ -1,6 +1,6 @@
 import { rolepage, roleadd, rolemodify, roledelete } from 'api/system';
 
-const role = {
+const system = {
   actions: {
     // 角色分页
     RolePage({ commit }, pageparam) {
@@ -14,9 +14,9 @@ const role = {
     },
 
     // 角色添加
-    RoleAdd({ commit, role }) {
+    RoleAdd({ commit }, role) {
       return new Promise((resolve, reject) => {
-        roleadd(role.RoleName, role.Remark).then(response => {
+        roleadd(role.RoleName, role.Status, role.Remark).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -25,9 +25,9 @@ const role = {
     },
 
     // 角色修改
-    RoleModify({ commit, state }) {
+    RoleModify({ commit }, role) {
       return new Promise((resolve, reject) => {
-        rolemodify(state.Id, state.RoleName, state.Remark).then(response => {
+        rolemodify(role.Id, role.RoleName, role.Status, role.Remark).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -36,9 +36,9 @@ const role = {
     },
 
     // 角色删除
-    RoleDelete({ commit, state }) {
+    RoleDelete({ commit, id }) {
       return new Promise((resolve, reject) => {
-        roledelete(state.id).then(response => {
+        roledelete(id).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -48,4 +48,4 @@ const role = {
   }
 };
 
-export default role;
+export default system;

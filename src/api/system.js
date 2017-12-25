@@ -12,9 +12,10 @@ export function rolepage(pageindex, pagesize, isasc) {
   });
 }
 
-export function roleadd(RoleName, Remark) {
+export function roleadd(RoleName, Status, Remark) {
   const data = {
     RoleName,
+    Status,
     Remark
   };
   return fetch({
@@ -24,10 +25,11 @@ export function roleadd(RoleName, Remark) {
   });
 }
 
-export function rolemodify(Id, RoleName, Remark) {
+export function rolemodify(Id, RoleName, Status, Remark) {
   const data = {
     Id,
     RoleName,
+    Status,
     Remark
   };
   return fetch({
