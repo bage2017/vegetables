@@ -79,6 +79,13 @@ export const asyncRouterMap = [
       { path: '/tinymce', name: 'Tinymce编辑器', icon: 'android-document', component: _import('Tinymce') },
       { path: '/markdown', name: 'Markdown', icon: 'android-list', component: _import('Markdown') },
       {
+        path: '/product', name: '产品管理', redirect: '/product/Product', icon: 'ios-rose', component: { render(c) { return c('router-view') } },
+        children: [
+          { path: 'Product', name: '产品管理', icon: 'ios-analytics', component: _import('product/Product') },
+          { path: 'ProductType', name: '产品分类管理', icon: 'ios-paper', component: _import('product/ProductType') }
+        ]
+      },
+      {
         path: '/system', name: '系统设置', redirect: '/system/Menu', icon: 'social-html5', component: { render(c) { return c('router-view') } },
         children: [
           { path: 'Menu', name: '菜单管理', icon: 'merge', component: _import('system/Menu') },
