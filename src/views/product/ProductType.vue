@@ -42,90 +42,103 @@
 </template>
 <script>
 export default {
-    name: "producttype",
-    data() {
-        return {
-            progresshow: false,
-            progresscount: 0,
-            progresstatus: "active",
-            progressspeed: 0,
-            datamodel: [],
-            save_loading: false,
-            modalform: false,
-            formInfo: {
-                ID: 0,
-                PID: 0,
-                CatName: "",
-                CatSort: 1,
-                Status: true
-            },
-            ruleValidate: {
-                CatName: [
-                    { required: true, message: "分类名称不能为空", trigger: "blur" },
-                    {
-                        type: "string",
-                        max: 20,
-                        message: "分类名称最多20个字",
-                        trigger: "blur"
-                    }
-                ]
-            }
-        };
+  name: 'producttype',
+  data() {
+    return {
+      progresshow: false,
+      progresscount: 0,
+      progresstatus: 'active',
+      progressspeed: 0,
+      datamodel: [],
+      save_loading: false,
+      modalform: false,
+      formInfo: {
+        ID: 0,
+        PID: 0,
+        CatName: '',
+        CatSort: 1,
+        Status: true
+      },
+      ruleValidate: {
+        CatName: [
+          { required: true, message: '分类名称不能为空', trigger: 'blur' },
+          {
+            type: 'string',
+            max: 20,
+            message: '分类名称最多20个字',
+            trigger: 'blur'
+          }
+        ]
+      }
+    };
+  },
+  methods: {
+    getTree(tree = []) {
+      const arr = [];
+      if (!!tree && tree.length !== 0) {
+        tree.forEach(item => {
+          const obj = {};
+          obj.title = item.CatName;
+          obj.attr = item.ID; // 其他你想要添加的属性
+          obj.expand = false;
+          obj.children = this.getTree(item.Children); // 递归调用
+          arr.push(obj);
+        });
+      }
+      return arr;
     },
-    methods: {
-        mockTreeData() {
-            const vue = this;
-            vue.$store
-                .dispatch("ProductTypeTree", vue.formInfo.PID)
-                .then(result => {
-                    if (result.Code == 200) {
-                        vue.datamodel = result.Data;
-                    } else {
-                        vue.$Message.error(result.Message);
-                    }
-                })
-                .catch(err => {
-                    vue.$Message.error(err);
-                });
-            return vue.datamodel;
-        },
-        handleSubmit(name) {
-            this.$refs[name].validate(valid => {
-                if (valid) {
-                    this.save_loading = true;
-                    let action = "ProductTypeAdd";
-                    if (this.formInfo.ID) {
-                        action = "ProductTypeModify";
-                    }
-                    this.$store
-                        .dispatch(action, this.formInfo)
-                        .then(result => {
-                            if (result.Code == 200) {
-                                this.$Message.success("保存成功");
-                            } else {
-                                this.$Message.error(result.Message);
-                            }
-                        })
-                        .catch(err => {
-                            this.$Message.error(err);
-                        });
-                    setTimeout(() => {
-                        this.save_loading = false;
-                        this.modalform = false;
-                        this.$refs.formInfo.resetFields();
-                        this.mockTreeData();
-                    }, 2000);
-                } else {
-                    this.$Message.error("请输入完整信息!");
-                }
+    mockTreeData() {
+      const vue = this;
+      vue.$store
+        .dispatch('ProductTypeTree', vue.formInfo.PID)
+        .then(result => {
+          if (result.Code == 200) {
+            vue.datamodel = vue.getTree(result.Data);
+          } else {
+            vue.$Message.error(result.Message);
+          }
+        })
+        .catch(err => {
+          vue.$Message.error(err);
+        });
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.save_loading = true;
+          let action = 'ProductTypeAdd';
+          if (this.formInfo.ID) {
+            action = 'ProductTypeModify';
+          }
+          this.$store
+            .dispatch(action, this.formInfo)
+            .then(result => {
+              if (result.Code == 200) {
+                this.$Message.success('保存成功');
+              } else {
+                this.$Message.error(result.Message);
+              }
+            })
+            .catch(err => {
+              this.$Message.error(err);
             });
-        },
-        handleReset(name) {
-            this.$refs[name].resetFields();
+          setTimeout(() => {
+            this.save_loading = false;
+            this.modalform = false;
+            this.$refs.formInfo.resetFields();
+            this.mockTreeData();
+          }, 2000);
+        } else {
+          this.$Message.error('请输入完整信息!');
         }
+      });
     },
-    created() {
-        this.mockTreeData();
+    handleReset(name) {
+      this.$refs[name].resetFields();
     }
+  },
+  created() {
+    this.mockTreeData();
+  }
 };
 </script>
