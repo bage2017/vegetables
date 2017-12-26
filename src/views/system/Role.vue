@@ -3,7 +3,7 @@
         <Row>
             <Col :md="24">
             <div style="position:relative;">
-                <i-button type="primary" style="margin-bottom:6px;" @click="modalform=true">添加</i-button>
+                <Button type="primary" style="margin-bottom:6px;" @click="modalform=true">添加</Button>
                 <Table :data="datamodel" :columns="tablecolumns" stripe></Table>
                 <div style="margin: 10px;overflow: hidden">
                     <div style="float: right;">

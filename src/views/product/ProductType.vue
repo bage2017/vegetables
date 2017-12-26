@@ -1,16 +1,14 @@
 <template>
   <div class="animated fadeIn">
     <Row>
-      <Col :md="24">
-      <div style="position:relative;">
-        <i-button type="primary" style="margin-bottom:6px;" @click="modalform=true">添加</i-button>
+      <Col :md="12">
+      <div style="position:relative;margin-bottom:6px;">
+        <Button type="primary" @click="modifydata">编辑</Button>
+        <Button type="error" @click="deletedata">删除</Button>
         <Tree :data="datamodel" :load-data="mockTreeData" show-checkbox></Tree>
       </div>
       </Col>
-    </Row>
-    <Row>
-      <Col :md="24">
-      <Modal title="产品分类信息" v-model="modalform" class-name="vertical-center-modal">
+      <Col :md="12">
         <Form ref="formInfo" :model="formInfo" :rules="ruleValidate" :label-width="80">
           <Form-item prop="ID" style="display:none;">
             <Input v-model="formInfo.ID"></Input>
@@ -30,12 +28,11 @@
               <span slot="close">屏蔽</span>
             </iSwitch>
           </Form-item>
+          <Form-item>
+            <Button type="ghost" @click="handleReset('formInfo')" style="margin-left: 8px">清空</Button>
+            <Button type="primary" :loading="save_loading" @click="handleSubmit('formInfo')">保存</Button>
+          </Form-item>
         </Form>
-        <div slot="footer">
-          <Button type="ghost" @click="handleReset('formInfo')" style="margin-left: 8px">清空</Button>
-          <Button type="primary" :loading="save_loading" @click="handleSubmit('formInfo')">保存</Button>
-        </div>
-      </Modal>
       </Col>
     </Row>
   </div>
@@ -51,7 +48,6 @@ export default {
       progressspeed: 0,
       datamodel: [],
       save_loading: false,
-      modalform: false,
       formInfo: {
         ID: 0,
         PID: 0,
@@ -102,6 +98,12 @@ export default {
           vue.$Message.error(err);
         });
     },
+    modifydata() {
+      this.$Message.info('编辑');
+    },
+    deletedata() {
+      this.$Message.error('删除');
+    },
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
@@ -124,7 +126,6 @@ export default {
             });
           setTimeout(() => {
             this.save_loading = false;
-            this.modalform = false;
             this.$refs.formInfo.resetFields();
             this.mockTreeData();
           }, 2000);

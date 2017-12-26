@@ -49,7 +49,7 @@ const defalutList = [
   { text: 'read blogs            (阅读教程了吗？)', done: false },
   { text: 'use and learn         (学到新东西了吗？)', done: false },
   { text: 'make a cool project?  (搞了一个牛项目吗？)', done: false },
-   { text: 'are you a single dog?(是不是女朋友丢了？)', done: false },
+   { text: 'are you a single dog?(是不是女朋友丢了？)', done: false }
 ]
 export default {
   components: { Todo },
