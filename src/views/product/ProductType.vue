@@ -37,203 +37,203 @@
 </template>
 <script>
 export default {
-    name: "producttype",
-    data() {
-        return {
-            progresshow: false,
-            progresscount: 0,
-            progresstatus: "active",
-            progressspeed: 0,
-            datamodel: [],
-            save_loading: false,
-            actiontype: "ProductTypeAdd",
-            formInfo: {
-                ID: 0,
-                PID: 0,
-                ParentName: "总分类",
-                CatName: "",
-                CatSort: 1
+  name: 'producttype',
+  data() {
+      return {
+          progresshow: false,
+          progresscount: 0,
+          progresstatus: 'active',
+          progressspeed: 0,
+          datamodel: [],
+          save_loading: false,
+          actiontype: 'ProductTypeAdd',
+          formInfo: {
+              ID: 0,
+              PID: 0,
+              ParentName: '总分类',
+              CatName: '',
+              CatSort: 1
             },
-            selectNode: {
-                ID: 0,
-                PID: 1,
-                ParentName: "总分类",
-                CatName: "",
-                CatSort: 1
+          selectNode: {
+              ID: 0,
+              PID: 1,
+              ParentName: '总分类',
+              CatName: '',
+              CatSort: 1
             },
-            ruleValidate: {
-                CatName: [
-                    { required: true, message: "分类名称不能为空", trigger: "blur" },
-                    {
-                        type: "string",
-                        max: 20,
-                        message: "分类名称最多20个字",
-                        trigger: "blur"
-                    }
+          ruleValidate: {
+              CatName: [
+                    { required: true, message: '分类名称不能为空', trigger: 'blur' },
+                  {
+                    type: 'string',
+                    max: 20,
+                    message: '分类名称最多20个字',
+                    trigger: 'blur'
+                  }
                 ]
             }
         };
     },
-    methods: {
-        getTree(tree = []) {
-            const arr = [];
-            if (tree && tree.length > 0) {
-                tree.forEach(item => {
-                    const obj = {};
-                    obj.title = item.CatName;
-                    obj.ID = item.ID; // 其他你想要添加的属性
-                    obj.PID = item.PID;
-                    obj.CatSort = item.CatSort;
-                    obj.expand = true;
-                    if (item.Children.length > 0) {
-                        obj.children = this.getTree(item.Children); // 递归调用
+  methods: {
+      getTree(tree = []) {
+          const arr = [];
+          if (tree && tree.length > 0) {
+              tree.forEach(item => {
+                  const obj = {};
+                  obj.title = item.CatName;
+                  obj.ID = item.ID; // 其他你想要添加的属性
+                  obj.PID = item.PID;
+                  obj.CatSort = item.CatSort;
+                  obj.expand = false;
+                  if (item.Children.length > 0) {
+                      obj.children = this.getTree(item.Children); // 递归调用
                     }
-                    arr.push(obj);
+                  arr.push(obj);
                 });
             }
-            return arr;
+          return arr;
         },
-        findParent(tree = [], id) {
-            tree.forEach(item => {
-                if (item.ID == id) {
-                    this.selectNode.ParentName = item.title;
-                    return;
+      findParent(tree = [], id) {
+          tree.forEach(item => {
+              if (item.ID == id) {
+                  this.selectNode.ParentName = item.title;
+                  return;
                 }
-                if (item.children) {
-                    this.findParent(item.children, id);
+              if (item.children) {
+                  this.findParent(item.children, id);
                 }
             });
         },
-        mockTreeData() {
-            const vue = this;
-            vue.$store
-                .dispatch("ProductTypeTree", 0)
+      mockTreeData() {
+          const vue = this;
+          vue.$store
+                .dispatch('ProductTypeTree', 0)
                 .then(result => {
-                    if (result.Code == 200) {
-                        vue.datamodel = vue.getTree(result.Data);
+                  if (result.Code == 200) {
+                      vue.datamodel = vue.getTree(result.Data);
                     } else {
-                        vue.$Message.error(result.Message);
+                      vue.$Message.error(result.Message);
                     }
                 })
                 .catch(err => {
-                    vue.$Message.error(err);
+                  vue.$Message.error(err);
                 });
         },
-        adddata() {
-            this.actiontype = "ProductTypeAdd";
-            if (this.selectNode) {
-                this.formInfo.PID = this.selectNode.ID;
-                this.formInfo.ParentName = this.selectNode.CatName;
+      adddata() {
+          this.actiontype = 'ProductTypeAdd';
+          if (this.selectNode) {
+              this.formInfo.PID = this.selectNode.ID;
+              this.formInfo.ParentName = this.selectNode.CatName;
             }
-            this.formInfo.ID = 0;
-            this.formInfo.CatName = "";
-            this.formInfo.CatSort = 1;
+          this.formInfo.ID = 0;
+          this.formInfo.CatName = '';
+          this.formInfo.CatSort = 1;
         },
-        modifydata() {
-            if (this.selectNode) {
-                if (this.selectNode.ID > 1) {
-                    this.actiontype = "ProductTypeModify";
-                    this.formInfo.ID = this.selectNode.ID;
-                    this.formInfo.PID = this.selectNode.PID;
-                    this.formInfo.ParentName = this.selectNode.ParentName;
-                    this.formInfo.CatName = this.selectNode.CatName;
-                    this.formInfo.CatSort = this.selectNode.CatSort;
+      modifydata() {
+          if (this.selectNode) {
+              if (this.selectNode.ID > 1) {
+                  this.actiontype = 'ProductTypeModify';
+                  this.formInfo.ID = this.selectNode.ID;
+                  this.formInfo.PID = this.selectNode.PID;
+                  this.formInfo.ParentName = this.selectNode.ParentName;
+                  this.formInfo.CatName = this.selectNode.CatName;
+                  this.formInfo.CatSort = this.selectNode.CatSort;
                 } else {
-                    this.$Message.error("顶级节点不能编辑");
+                  this.$Message.error('顶级节点不能编辑');
                 }
             } else {
-                this.$Message.error("请选择节点");
+              this.$Message.error('请选择节点');
             }
         },
-        deletedata() {
-            const vue = this;
-            if (vue.selectNode) {
-                if (vue.selectNode.ID > 1) {
-                    vue.$Modal.confirm({
-                        content: "<p>删除节点会删除所有子类.</p><p>确认删除?</p>",
-                        onOk: () => {
-                            vue.$store
-                                .dispatch("ProductTypeDelete", snid)
+      deletedata() {
+          const vue = this;
+          if (vue.selectNode) {
+              if (vue.selectNode.ID > 1) {
+                  vue.$Modal.confirm({
+                      content: '<p>删除节点会删除所有子类.</p><p>确认删除?</p>',
+                      onOk: () => {
+                          vue.$store
+                                .dispatch('ProductTypeDelete', snid)
                                 .then(result => {
-                                    if (result.Code == 200) {
-                                        vue.$Message.success("删除成功");
-                                        vue.mockTreeData();
+                                  if (result.Code == 200) {
+                                      vue.$Message.success('删除成功');
+                                      vue.mockTreeData();
                                     } else {
-                                        vue.$Message.error(result.Message);
+                                      vue.$Message.error(result.Message);
                                     }
                                 })
                                 .catch(err => {
-                                    vue.$Message.error(err);
+                                  vue.$Message.error(err);
                                 });
                         }
                     });
                 } else {
-                    this.$Message.error("顶级节点不能删除");
+                  this.$Message.error('顶级节点不能删除');
                 }
             } else {
-                this.$Message.error("请选择节点");
+              this.$Message.error('请选择节点');
             }
         },
-        handleSubmit(name) {
-            this.$refs[name].validate(valid => {
-                if (valid) {
-                    this.save_loading = true;
-                    if (this.formInfo.ID) {
-                        this.actiontype = "ProductTypeModify";
+      handleSubmit(name) {
+          this.$refs[name].validate(valid => {
+              if (valid) {
+                  this.save_loading = true;
+                  if (this.formInfo.ID) {
+                      this.actiontype = 'ProductTypeModify';
                     }
-                    if (this.formInfo.ID != 1) {
-                        this.$store
+                  if (this.formInfo.ID != 1) {
+                      this.$store
                             .dispatch(this.actiontype, this.formInfo)
                             .then(result => {
-                                if (result.Code == 200) {
-                                    this.$Message.success("保存成功");
+                              if (result.Code == 200) {
+                                  this.$Message.success('保存成功');
                                 } else {
-                                    this.$Message.error(result.Message);
+                                  this.$Message.error(result.Message);
                                 }
                             })
                             .catch(err => {
-                                this.$Message.error(err);
+                              this.$Message.error(err);
                             });
-                        setTimeout(() => {
-                            this.save_loading = false;
-                            this.$refs.formInfo.resetFields();
-                            this.mockTreeData();
+                      setTimeout(() => {
+                          this.save_loading = false;
+                          this.$refs.formInfo.resetFields();
+                          this.mockTreeData();
                         }, 2000);
                     } else {
-                        this.$Message.error("总分类不能进行编辑!");
+                      this.$Message.error('总分类不能进行编辑!');
                     }
                 } else {
-                    this.$Message.error("请输入完整信息!");
+                  this.$Message.error('请输入完整信息!');
                 }
-                this.save_loading = false;
+              this.save_loading = false;
             });
         },
-        handleSelect(value) {
-            var sn = value[0];
-            if (!sn) {
-                this.formInfo.PID = 1;
-                this.formInfo.ParentName = "总分类";
-                this.selectNode = null;
+      handleSelect(value) {
+          let sn = value[0];
+          if (!sn) {
+              this.formInfo.PID = 1;
+              this.formInfo.ParentName = '总分类';
+              this.selectNode = null;
             } else {
-                this.formInfo.PID = sn.ID;
-                this.formInfo.ParentName = sn.title;
-                this.selectNode = {
-                    ID: sn.ID,
-                    PID: sn.PID,
-                    CatName: sn.title,
-                    CatSort: sn.CatSort
+              this.formInfo.PID = sn.ID;
+              this.formInfo.ParentName = sn.title;
+              this.selectNode = {
+                  ID: sn.ID,
+                  PID: sn.PID,
+                  CatName: sn.title,
+                  CatSort: sn.CatSort
                 };
-                this.findParent(this.datamodel, sn.PID);
+              this.findParent(this.datamodel, sn.PID);
             }
-            this.actiontype = "ProductTypeAdd";
-            this.$Notice.open({
-                title: "选择节点提醒",
-                desc: sn ? "选择了节点:" + sn.title : "总分类"
+          this.actiontype = 'ProductTypeAdd';
+          this.$Notice.open({
+              title: '选择节点提醒',
+              desc: sn ? '选择了节点:' + sn.title : '总分类'
             });
         }
     },
-    created() {
-        this.mockTreeData();
+  created() {
+      this.mockTreeData();
     }
 };
 </script>
