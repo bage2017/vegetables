@@ -16,7 +16,7 @@ const product = {
     // 产品分类添加
     ProductTypeAdd({ commit }, ptype) {
       return new Promise((resolve, reject) => {
-        producttypeadd(ptype.PID, ptype.CatName, ptype.CatSort, ptype.Status).then(response => {
+        producttypeadd(ptype.PID, ptype.CatName, ptype.CatSort).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -27,7 +27,7 @@ const product = {
     // 产品分类修改
     ProductTypeModify({ commit }, ptype) {
       return new Promise((resolve, reject) => {
-        producttypemodify(ptype.ID, ptype.PID, ptype.CatName, ptype.CatSort, ptype.Status).then(response => {
+        producttypemodify(ptype.ID, ptype.PID, ptype.CatName, ptype.CatSort).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);

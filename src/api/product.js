@@ -8,12 +8,11 @@ export function producttypetree(pid) {
   });
 }
 
-export function producttypeadd(PID, CatName, CatSort, status) {
+export function producttypeadd(PID, CatName, CatSort) {
   const data = {
     PID,
     CatName,
-    CatSort,
-    Status: status ? 2 : 1
+    CatSort
   }
   return fetch({
     url: 'ProductType/Add',
@@ -22,13 +21,12 @@ export function producttypeadd(PID, CatName, CatSort, status) {
   });
 }
 
-export function producttypemodify(ID, PID, CatName, CatSort, status) {
+export function producttypemodify(ID, PID, CatName, CatSort) {
   const data = {
     ID,
     PID,
     CatName,
-    CatSort,
-    Status: status ? 2 : 1
+    CatSort
   }
   return fetch({
     url: 'ProductType/Modify',

@@ -164,10 +164,10 @@ export default {
                   on: {
                     click: () => {
                       const vue = this;
-                      this.$Modal.confirm({
+                      vue.$Modal.confirm({
                         content: '<p>确认删除?</p>',
                         onOk: () => {
-                          this.$store
+                          vue.$store
                             .dispatch('RoleDelete', params.row.Id)
                             .then(result => {
                               if (result.Code == 200) {

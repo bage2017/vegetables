@@ -31,7 +31,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       });
-      if (res.Code === 402 || res.Code === 403 || res.code === 407) {
+      if (res.Code === 403 || res.code === 407) {
         vue.$Message.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
@@ -48,10 +48,10 @@ service.interceptors.response.use(
     }
   }, error => {
   vue.$Message.error({
-    message: error.message,
-    duration: 5 * 1000,
-    closable: true
-  });
+      message: error.message,
+      duration: 5 * 1000,
+      closable: true
+    });
   return Promise.reject(error);
 }
 )
