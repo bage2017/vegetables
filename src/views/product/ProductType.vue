@@ -40,10 +40,6 @@ export default {
   name: 'producttype',
   data() {
       return {
-          progresshow: false,
-          progresscount: 0,
-          progresstatus: 'active',
-          progressspeed: 0,
           datamodel: [],
           save_loading: false,
           actiontype: 'ProductTypeAdd',
@@ -232,7 +228,7 @@ export default {
             });
         }
     },
-  created() {
+    created() {
       this.mockTreeData();
     }
 };

@@ -47,3 +47,50 @@ export function roledelete(id) {
   });
 }
 
+export function menutree(pid) {
+  return fetch({
+    url: 'Menu/GetMenuTree',
+    method: 'get',
+    params: { pid }
+  });
+}
+
+export function menusbypid(pid) {
+  return fetch({
+    url: 'Menu/GetMenusByPid',
+    method: 'get',
+    params: { pid }
+  });
+}
+
+export function menuadd(menu) {
+  return fetch({
+    url: 'Menu/Add',
+    method: 'post',
+    data: menu
+  });
+}
+
+export function menumodify(menu) {
+  return fetch({
+    url: 'Menu/Modify',
+    method: 'put',
+    data: menu
+  });
+}
+
+export function menudelete(id) {
+  return fetch({
+    url: 'Menu/Delete',
+    method: 'delete',
+    params: { id }
+  });
+}
+
+export function menuone(id) {
+  return fetch({
+    url: 'Menu/GetOne',
+    method: 'get',
+    params: { id }
+  });
+}

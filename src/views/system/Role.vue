@@ -53,10 +53,6 @@ export default {
   name: 'role',
   data() {
     return {
-      progresshow: false,
-      progresscount: 0,
-      progresstatus: 'active',
-      progressspeed: 0,
       pageparam: {
         pageindex: 1,
         pagesize: 12,

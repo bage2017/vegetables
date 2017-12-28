@@ -1,4 +1,4 @@
-import { rolepage, roleone, roleadd, rolemodify, roledelete } from 'api/system';
+import { rolepage, roleadd, rolemodify, roledelete, menutree, menusbypid, menuadd, menumodify, menudelete, menuone } from 'api/system';
 
 const system = {
   actions: {
@@ -41,6 +41,72 @@ const system = {
     RoleDelete({ commit }, id) {
       return new Promise((resolve, reject) => {
         roledelete(id).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 彩单树
+    MenusTree({ commit }, pid) {
+      return new Promise((resolve, reject) => {
+        menutree(pid).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 子集菜单
+    MenusByPid({ commit }, pid) {
+      return new Promise((resolve, reject) => {
+        menusbypid(pid).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 获取一条菜单
+    MenuOne({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        menuone(id).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 菜单添加
+    MenuAdd({ commit }, menu) {
+      return new Promise((resolve, reject) => {
+        menuadd(menu).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 菜单修改
+    MenuModify({ commit }, menu) {
+      return new Promise((resolve, reject) => {
+        menumodify(menu).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 菜单删除
+    MenuDelete({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        menudelete(id).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);

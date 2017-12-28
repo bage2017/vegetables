@@ -13,7 +13,7 @@
                 <span style="position:absolute;left:50%;top:-5px;" v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
               </Progress>
         </div>           
-            <div style="position:relative;">                
+            <div style="position:relative;">
                  <Table  :columns="columns7" :data="page_video_list" ref="table"></Table>
                   <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
                             align-items: center;
