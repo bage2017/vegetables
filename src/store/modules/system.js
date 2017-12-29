@@ -1,4 +1,8 @@
-import { rolepage, roleadd, rolemodify, roledelete, menutree, menusbypid, menuadd, menumodify, menudelete, menuone } from 'api/system';
+import {
+  rolepage, rolelist, roleadd, rolemodify, roledelete, rolemenu,
+  menutree, menusbyrid, menuadd, menumodify, menudelete,
+  adminpage, adminadd, adminmodify, admindelete
+} from 'api/system';
 
 const system = {
   actions: {
@@ -6,6 +10,17 @@ const system = {
     RolePage({ commit }, pageparam) {
       return new Promise((resolve, reject) => {
         rolepage(pageparam.pageindex, pageparam.pagesize, pageparam.isasc).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 角色列表
+    RoleList({ commit }) {
+      return new Promise((resolve, reject) => {
+        rolelist().then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -48,7 +63,18 @@ const system = {
       });
     },
 
-    // 彩单树
+    // 权限编辑
+    RoleMenu({ commit }, rm) {
+      return new Promise((resolve, reject) => {
+        rolemenu(rm.rid, rm.mids).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 全部菜单树
     MenusTree({ commit }, pid) {
       return new Promise((resolve, reject) => {
         menutree(pid).then(response => {
@@ -59,21 +85,10 @@ const system = {
       });
     },
 
-    // 子集菜单
-    MenusByPid({ commit }, pid) {
+    // 角色菜单id集合
+    MenusByRid({ commit }, rid) {
       return new Promise((resolve, reject) => {
-        menusbypid(pid).then(response => {
-          resolve(response);
-        }).catch(error => {
-          reject(error);
-        });
-      });
-    },
-
-    // 获取一条菜单
-    MenuOne({ commit }, id) {
-      return new Promise((resolve, reject) => {
-        menuone(id).then(response => {
+        menusbyrid(rid).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -107,6 +122,50 @@ const system = {
     MenuDelete({ commit }, id) {
       return new Promise((resolve, reject) => {
         menudelete(id).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 用户列表
+    AdminPage({ commit }, { pageindex, pagesize, loginrealname }) {
+      return new Promise((resolve, reject) => {
+        adminpage(pageindex, pagesize, loginrealname).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 用户添加
+    AdminAdd({ commit }, admin) {
+      return new Promise((resolve, reject) => {
+        adminadd(admin).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 用户修改
+    AdminModify({ commit }, admin) {
+      return new Promise((resolve, reject) => {
+        adminmodify(admin).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 用户删除
+    AdminDelete({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        admindelete(id).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);

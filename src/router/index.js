@@ -90,7 +90,8 @@ export const asyncRouterMap = [
         children: [
           { path: 'Menu', name: '菜单管理', icon: 'merge', component: _import('system/Menu') },
           { path: 'Role', name: '角色管理', icon: 'ios-paper', component: _import('system/Role') },
-          { path: 'RoleMenu', name: '权限管理', icon: 'android-document', component: _import('system/RoleMenu') }
+          { path: 'RoleMenu', name: '权限管理', icon: 'android-document', component: _import('system/RoleMenu') },
+          { path: 'Admin', name: '用户管理', icon: 'ios-personadd', component: _import('system/Admin') }
         ]
       }
     ]

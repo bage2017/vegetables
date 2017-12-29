@@ -21,13 +21,27 @@
     </Row>
     <Row>
       <Col :md="24">
-      <Modal title="角色信息" v-model="modalform" class-name="vertical-center-modal">
+      <Modal title="用户信息" v-model="modalform" class-name="vertical-center-modal">
         <Form ref="formInfo" :model="formInfo" :rules="ruleValidate" :label-width="80">
-          <Form-item prop="Id" style="display:none;">
-            <Input v-model="formInfo.Id"></Input>
+          <Form-item prop="ID" style="display:none;">
+            <Input v-model="formInfo.ID"></Input>
           </Form-item>
-          <Form-item label="名称" prop="RoleName">
-            <Input v-model="formInfo.RoleName" placeholder="请输入名称"></Input>
+          <Form-item label="登录名" prop="LoginName">
+            <Input v-model="formInfo.LoginName" placeholder="请输入登录名"></Input>
+          </Form-item>
+          <Form-item label="真实姓名" prop="RealName">
+            <Input v-model="formInfo.RealName" placeholder="请输入真实姓名"></Input>
+          </Form-item>
+          <Form-item label="电话" prop="TelePhone">
+            <Input v-model="formInfo.TelePhone" placeholder="请输入电话"></Input>
+          </Form-item>
+          <Form-item label="头像" prop="Avatar">
+            <Input v-model="formInfo.Avatar" placeholder="请上传头像"></Input>
+          </Form-item>
+          <Form-item label="角色" prop="RoleId">
+            <Select v-model="formInfo.RoleId" style="width:200px">
+              <Option v-for="item in rolelist" :value="item.RoleId" :key="item.RoleId">{{ item.RoleName }}</Option>
+            </Select>
           </Form-item>
           <Form-item label="状态" prop="Status">
             <iSwitch v-model="formInfo.Status" size="large">
@@ -50,48 +64,61 @@
 </template>
 <script>
 export default {
-    name: "role",
+    name: "admin",
     data() {
         return {
             pageparam: {
                 pageindex: 1,
                 pagesize: 12,
-                isasc: false,
+                loginrealname: "",
                 totalcount: 0
             },
             datamodel: [],
+            rolelist: [],
             save_loading: false,
             list_loadding: false,
             tablecolumns: [
+                {
+                    title: "登录名",
+                    key: "LoginName",
+                    ellipsis: "true"
+                },
+                {
+                    title: "真实姓名",
+                    key: "RealName",
+                    ellipsis: "true"
+                },
+                {
+                    title: "电话",
+                    key: "TelePhone",
+                    ellipsis: "true"
+                },
+                {
+                    title: "头像",
+                    key: "Avatar",
+                    ellipsis: "true"
+                },
                 {
                     title: "角色名称",
                     key: "RoleName",
                     ellipsis: "true"
                 },
                 {
+                    title: "创建日期",
+                    key: "BuildDate",
+                    ellipsis: "true"
+                },
+                {
                     title: "备注",
-                    ellipsis: "true",
-                    key: "Remark"
+                    key: "Remark",
+                    ellipsis: "true"
                 },
                 {
                     title: "状态",
                     ellipsis: "true",
                     render: (h, params) => {
                         const status = parseInt(params.row.Status);
-                        if (status === 0) {
-                            return h("div", [
-                                h(
-                                    "Tag",
-                                    {
-                                        props: {
-                                            type: "dot",
-                                            color: "red"
-                                        }
-                                    },
-                                    "删除"
-                                )
-                            ]);
-                        } else if (status === 1) {
+                        if (status === 1) {
                             return h("div", [
                                 h(
                                     "Tag",
@@ -139,13 +166,19 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            const role = params.row;
-                                            this.formInfo.Id = role.Id;
-                                            this.formInfo.RoleName =
-                                                role.RoleName;
+                                            const admin = params.row;
+                                            this.formInfo.ID = admin.ID;
+                                            this.formInfo.LoginName =
+                                                admin.LoginName;
+                                            this.formInfo.RealName =
+                                                admin.RealName;
+                                            this.formInfo.TelePhone =
+                                                admin.TelePhone;
+                                            this.formInfo.Avatar = admin.Avatar;
+                                            this.formInfo.RoleId = admin.RoleId;
                                             this.formInfo.Status =
-                                                role.Status == 2;
-                                            this.formInfo.Remark = role.Remark;
+                                                admin.Status == 2;
+                                            this.formInfo.Remark = admin.Remark;
                                             this.modalform = true;
                                         }
                                     }
@@ -167,7 +200,7 @@ export default {
                                                 onOk: () => {
                                                     vue.$store
                                                         .dispatch(
-                                                            "RoleDelete",
+                                                            "AdminDelete",
                                                             params.row.Id
                                                         )
                                                         .then(result => {
@@ -202,18 +235,22 @@ export default {
             ],
             modalform: false,
             formInfo: {
-                Id: 0,
-                RoleName: "",
-                Status: true,
+                ID: 0,
+                LoginName: "",
+                RealName: "",
+                TelePhone: "",
+                Avatar: "",
+                RoleId: "",
+                Status: "",
                 Remark: ""
             },
             ruleValidate: {
-                RoleName: [
-                    { required: true, message: "角色名称不能为空", trigger: "blur" },
+                RealName: [
+                    { required: true, message: "真实姓名不能为空", trigger: "blur" },
                     {
                         type: "string",
-                        max: 20,
-                        message: "角色名称最多20个字",
+                        max: 36,
+                        message: "真实姓名最多36个字",
                         trigger: "blur"
                     }
                 ],
@@ -232,10 +269,10 @@ export default {
         mockTableData() {
             const vue = this;
             this.$store
-                .dispatch("RolePage", {
+                .dispatch("AdminPage", {
                     pageindex: vue.pageparam.pageindex,
                     pagesize: vue.pageparam.pagesize,
-                    isasc: vue.pageparam.isasc
+                    loginrealname: vue.pageparam.loginrealname
                 })
                 .then(result => {
                     vue.datamodel = result.Data.DataList;
@@ -261,9 +298,9 @@ export default {
             this.$refs[name].validate(valid => {
                 if (valid) {
                     this.save_loading = true;
-                    let action = "RoleAdd";
+                    let action = "AdminAdd";
                     if (this.formInfo.Id) {
-                        action = "RoleModify";
+                        action = "AdminModify";
                     }
                     this.$store
                         .dispatch(action, this.formInfo)

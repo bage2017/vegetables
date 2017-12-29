@@ -12,6 +12,13 @@ export function rolepage(pageindex, pagesize, isasc) {
   });
 }
 
+export function rolelist() {
+  return fetch({
+    url: 'Role/GetRoles',
+    method: 'get'
+  });
+}
+
 export function roleadd(RoleName, Status, Remark) {
   const data = {
     RoleName,
@@ -47,6 +54,18 @@ export function roledelete(id) {
   });
 }
 
+export function rolemenu(Rid, Mids) {
+  const data = {
+    Rid,
+    Mids
+  }
+  return fetch({
+    url: 'Role/AddRoleMenu',
+    method: 'post',
+    data
+  });
+}
+
 export function menutree(pid) {
   return fetch({
     url: 'Menu/GetMenuTree',
@@ -55,11 +74,11 @@ export function menutree(pid) {
   });
 }
 
-export function menusbypid(pid) {
+export function menusbyrid(rid) {
   return fetch({
-    url: 'Menu/GetMenusByPid',
+    url: 'Menu/GetMenusByRid',
     method: 'get',
-    params: { pid }
+    params: { rid }
   });
 }
 
@@ -87,10 +106,40 @@ export function menudelete(id) {
   });
 }
 
-export function menuone(id) {
+export function adminpage(pageindex, pagesize, loginrealname) {
   return fetch({
-    url: 'Menu/GetOne',
+    url: 'Admin/PageList',
     method: 'get',
+    params: {
+      pageindex,
+      pagesize,
+      loginrealname
+    }
+  });
+}
+
+export function adminadd(admin) {
+  const data = admin;
+  return fetch({
+    url: 'Admin/Add',
+    method: 'post',
+    data
+  });
+}
+
+export function adminmodify(admin) {
+  const data = admin;
+  return fetch({
+    url: 'Admin/Modify',
+    method: 'put',
+    data
+  });
+}
+
+export function admindelete(id) {
+  return fetch({
+    url: 'Admin/Delete',
+    method: 'delete',
     params: { id }
   });
 }

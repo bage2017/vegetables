@@ -127,7 +127,7 @@ export default {
         tree.forEach(item => {
           const obj = {};
           obj.title = item.MenuName;
-          obj.ID = item.ID; // 其他你想要添加的属性
+          obj.ID = item.ID;
           obj.Pid = item.Pid;
           obj.MenuHref = item.MenuHref;
           obj.MenuIcon = item.MenuIcon;

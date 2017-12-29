@@ -17,7 +17,6 @@ service.interceptors.request.use(config => {
   return config;
 }, error => {
   // Do something with request error
-  console.log(error); // for debug
   Promise.reject(error);
 })
 
@@ -25,35 +24,25 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     const res = response.data;
-    if (res.Code !== 200) {
-      vue.$Message.error({
-        message: res.message,
-        type: 'error',
-        duration: 5 * 1000
-      });
-      if (res.Code === 403 || res.code === 407) {
-        vue.$Message.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload(); // 为了重新实例化vue-router对象 避免bug
-          });
-        })
-      }
-      return Promise.reject(error);
-    } else {
-      return res;
+    if (res.Code === 403 || res.code === 407) {
+      vue.$Message.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        store.dispatch('FedLogOut').then(() => {
+          location.reload(); // 为了重新实例化vue-router对象 避免bug
+        });
+      })
     }
+    return res;
   }, error => {
   vue.$Message.error({
-      message: error.message,
-      duration: 5 * 1000,
-      closable: true
-    });
+    message: error.message,
+    duration: 5 * 1000,
+    closable: true
+  });
   return Promise.reject(error);
-}
-)
+})
 
 export default service;
