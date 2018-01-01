@@ -19,56 +19,59 @@
     </div>
 </template>
 <script>
-var wwidth =window.innerWidth,wheight = window.innerHeight;
+let wwidth = window.innerWidth,
+  wheight = window.innerHeight;
 export default {
-  name: "login",
+  name: 'login',
   data() {
     const validateUser = (rule, value, callback) => {
       if (value.length < 3) {
-        callback(new Error("用户名不能小于3位"));
+        callback(new Error('用户名不能小于3位'));
       } else {
         callback();
       }
     };
     const validatePass = (rule, value, callback) => {
       if (value.length < 3) {
-        callback(new Error("密码不能小于3位"));
+        callback(new Error('密码不能小于3位'));
       } else {
         callback();
       }
     };
     return {
       loginForm: {
-        LoginName: "admin",
-        LoginPwd: ""
+        LoginName: 'admin',
+        LoginPwd: ''
       },
       loginRules: {
-        LoginName: [{ required: true, trigger: "blur", validator: validateUser }],
-        LoginPwd: [{ required: true, trigger: "blur", validator: validatePass }]
+        LoginName: [
+          { required: true, trigger: 'blur', validator: validateUser }
+        ],
+        LoginPwd: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,
       showDialog: false
     };
   },
   mounted() {
-    container = document.createElement("div");
+    container = document.createElement('div');
     this.$refs.can.appendChild(container);
     camera = new THREE.PerspectiveCamera(75, wwidth / wheight, 1, 10000);
     camera.position.z = 1000;
     scene = new THREE.Scene();
     particles = new Array();
-    var PI2 = Math.PI * 2;
-    var material = new THREE.ParticleCanvasMaterial({
+    let PI2 = Math.PI * 2;
+    let material = new THREE.ParticleCanvasMaterial({
       color: 0x0078de,
-      program: function(context) {
+      program(context) {
         context.beginPath();
         context.arc(0, 0, 1, 0, PI2, true);
         context.fill();
       }
     });
-    var i = 0;
-    for (var ix = 0; ix < AMOUNTX; ix++) {
-      for (var iy = 0; iy < AMOUNTY; iy++) {
+    let i = 0;
+    for (let ix = 0; ix < AMOUNTX; ix++) {
+      for (let iy = 0; iy < AMOUNTY; iy++) {
         particle = particles[i++] = new THREE.Particle(material);
         particle.position.x = ix * SEPARATION - AMOUNTX * SEPARATION / 2;
         particle.position.z = iy * SEPARATION - AMOUNTY * SEPARATION / 2;
@@ -78,8 +81,8 @@ export default {
     renderer = new THREE.CanvasRenderer();
     renderer.setSize(wwidth, wheight);
     container.appendChild(renderer.domElement);
-    document.addEventListener("mousemove", onDocumentMouseMove, false); //
-    window.addEventListener("resize", onWindowResize, false);
+    document.addEventListener('mousemove', onDocumentMouseMove, false); //
+    window.addEventListener('resize', onWindowResize, false);
     animate();
   },
   methods: {
@@ -88,18 +91,22 @@ export default {
         if (valid) {
           this.loading = true;
           this.$store
-            .dispatch("Login", this.loginForm)
-            .then(() => {
-              this.$Message.success("登录成功");
-              this.loading = false;
-              this.$router.push({ path: "/" });
+            .dispatch('Login', this.loginForm)
+            .then(response => {
+              if (response.Code == 200) {
+                this.$Message.success('登录成功');
+                this.loading = false;
+                this.$router.push({ path: '/' });
+              } else {
+                this.$Message.error(response.Message);
+              }
             })
             .catch(err => {
               this.$Message.error(err);
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
+          console.log('error submit!!');
           return false;
         }
       });
@@ -131,15 +138,15 @@ export default {
 var SEPARATION = 100,
   AMOUNTX = 50,
   AMOUNTY = 50;
-var container;
-var camera, scene, renderer;
-var particles,
+let container;
+let camera, scene, renderer;
+let particles,
   particle,
   count = 0;
-var mouseX = 0,
+let mouseX = 0,
   mouseY = 0;
-var windowHalfX = wwidth / 2;
-var windowHalfY = wheight / 2; // animate();
+let windowHalfX = wwidth / 2;
+let windowHalfY = wheight / 2; // animate();
 function init() {}
 function onWindowResize() {
   windowHalfX = wwidth / 2;
@@ -176,9 +183,9 @@ function render() {
   camera.position.x += (mouseX - camera.position.x) * 0.05;
   camera.position.y += (-mouseY - camera.position.y) * 0.05;
   camera.lookAt(scene.position);
-  var i = 0;
-  for (var ix = 0; ix < AMOUNTX; ix++) {
-    for (var iy = 0; iy < AMOUNTY; iy++) {
+  let i = 0;
+  for (let ix = 0; ix < AMOUNTX; ix++) {
+    for (let iy = 0; iy < AMOUNTY; iy++) {
       particle = particles[i++];
       particle.position.y =
         Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50;
@@ -195,7 +202,9 @@ function render() {
 .login-container a {
   color: #0078de;
 }
-body{overflow: hidden;}
+body {
+  overflow: hidden;
+}
 #canvascontainer {
   position: absolute;
   top: 0px;

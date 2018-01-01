@@ -36,7 +36,6 @@
             <Input v-model="formInfo.TelePhone" placeholder="请输入电话"></Input>
           </Form-item>
           <Form-item label="头像" prop="Avatar">
-            <!-- <Input v-model="formInfo.Avatar" placeholder="请上传头像"></Input> -->
             <div class="demo-upload-list" v-for="item in uploadList">
         <template v-if="item.status === 'finished'">
             <img :src="item.url">
@@ -67,7 +66,7 @@
             <Icon type="camera" size="20"></Icon>
         </div>
     </Upload>
-    <Modal title="View Image" v-model="visible">
+    <Modal title="View Image" v-model="visible" style="z-index:1006;">
         <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
     </Modal>
           </Form-item>
@@ -286,7 +285,7 @@ export default {
           }
         ]
       },
-      defaultimg: [
+      defaultList: [
         {
           name: 'a42bdcc1178e62b4694c830f028db5c0',
           url:
@@ -375,17 +374,13 @@ export default {
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
     },
     handleSuccess(res, file) {
-      file.url =
-        'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+      file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
       file.name = '7eb99afb9d5f317c912f08b5212fd69a';
     },
     handleFormatError(file) {
       this.$Notice.warning({
         title: 'The file format is incorrect',
-        desc:
-          'File format of ' +
-          file.name +
-          ' is incorrect, please select jpg or png.'
+        desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
       });
     },
     handleMaxSize(file) {
@@ -406,8 +401,8 @@ export default {
   },
   mounted() {
     const vue = this;
-    vue.uploadList = vue.$refs.upload.fileList;
     vue.list_loadding = true;
+    vue.uploadList = vue.$refs.upload.fileList;
     setTimeout(() => {
       vue.list_loadding = false;
     }, 2000);

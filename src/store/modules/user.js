@@ -68,7 +68,7 @@ const user = {
         login(LoginName, userInfo.LoginPwd).then(response => {
           Cookies.set('Admin-Token', response.Data);
           commit('SET_TOKEN', response.Data);
-          resolve();
+          resolve(response);
         }).catch(error => {
           reject(error);
         });
