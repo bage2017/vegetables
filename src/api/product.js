@@ -43,3 +43,34 @@ export function producttypedelete(id) {
   });
 }
 
+export function productpage(pageparam) {
+  return fetch({
+    url: 'Product/GetPage',
+    method: 'get',
+    params: pageparam
+  });
+}
+
+export function productadd(product) {
+  return fetch({
+    url: 'Product/Create',
+    method: 'post',
+    data: product
+  });
+}
+
+export function productmodify(product) {
+  return fetch({
+    url: 'Product/Update',
+    method: 'put',
+    data: product
+  });
+}
+
+export function productdelete(id) {
+  return fetch({
+    url: 'Product/Delete',
+    method: 'delete',
+    params: { id }
+  });
+}

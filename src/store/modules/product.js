@@ -1,4 +1,7 @@
-import { producttypetree, producttypeadd, producttypemodify, producttypedelete } from 'api/product';
+import {
+  producttypetree, producttypeadd, producttypemodify, producttypedelete,
+  productpage, productadd, productmodify, productdelete
+} from 'api/product';
 
 const product = {
   actions: {
@@ -39,6 +42,50 @@ const product = {
     ProductTypeDelete({ commit }, id) {
       return new Promise((resolve, reject) => {
         producttypedelete(id).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 产品分页
+    ProductPage({ commit }, pageparam) {
+      return new Promise((resolve, reject) => {
+        productpage(pageparam).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 产品添加
+    ProductAdd({ commit }, product) {
+      return new Promise((resolve, reject) => {
+        productadd(product).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 产品修改
+    ProductModify({ commit }, product) {
+      return new Promise((resolve, reject) => {
+        productmodify(product).then(response => {
+          resolve(response);
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
+
+    // 产品删除
+    ProductDelete({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        productdelete(id).then(response => {
           resolve(response);
         }).catch(error => {
           reject(error);
