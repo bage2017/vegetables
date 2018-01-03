@@ -1,42 +1,51 @@
 <template>
-    <Form :model="formItem" :label-width="80" inline>
-        <FormItem label="Input">
-            <Input v-model="formItem.input" placeholder="Enter something..."></Input>
-        </FormItem>
-        <FormItem label="Select">
-            <Select v-model="formItem.select">
-                <Option value="beijing">New York</Option>
-                <Option value="shanghai">London</Option>
-                <Option value="shenzhen">Sydney</Option>
-            </Select>
-        </FormItem>
-        <FormItem label="DatePicker">
-            <Row>
-                <Col span="11">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.date"></DatePicker>
-                </Col>
-                <Col span="2" style="text-align: center">-</Col>
-                <Col span="11">
-                    <TimePicker type="time" placeholder="Select time" v-model="formItem.time"></TimePicker>
-                </Col>
-            </Row>
-        </FormItem>
-        <FormItem>
-            <Button type="primary">搜索</Button>
-        </FormItem>
-    </Form>
+    <div class="animated fadeIn">
+        <Row>
+            <Col :md="24">
+            <Form :model="searchFrom" :label-width="80" inline>
+                <FormItem label="名称描述">
+                    <Input v-model="searchFrom.productname" placeholder="产品名称或描述..."></Input>
+                </FormItem>
+                <FormItem label="产品类型">
+                    <Select v-model="searchFrom.productcid" style="width:160px;">
+                        <Option value="0">全部</Option>
+                        <Option value="1">纽约</Option>
+                        <Option value="2">伦敦</Option>
+                        <Option value="3">悉尼</Option>
+                    </Select>
+                </FormItem>
+                <FormItem>
+                    <Button type="primary">搜索</Button>
+                </FormItem>
+            </Form>
+            </Col>
+        </Row>
+        <Row>
+            <Col :md="24">
+            <div style="position:relative;">
+                <Button type="primary" style="margin-bottom:6px;" @click="handleAdd">添加</Button>
+                <Table :data="datamodel" :columns="tablecolumns" stripe></Table>
+            </div>
+            </Col>
+        </Row>
+    </div>
 </template>
 <script>
-    export default {
-      data() {
+export default {
+    data() {
         return {
-          formItem: {
-            input: '',
-            select: '',
-            date: '',
-            time: ''
-          }
+            searchFrom: {
+                productname: "",
+                productcid: 0
+            },
+            datamodel: [],
+            tablecolumns: []
+        };
+    },
+    methods: {
+        handleAdd() {
+            this.$Message.info("添加");
         }
-      }
     }
+};
 </script>
